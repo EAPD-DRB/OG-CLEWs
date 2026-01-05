@@ -4,18 +4,23 @@ Integration of the CLEWS and OG-CORE models
 ## Workshop (January 14-15, 2026 in Manila, Philippines):
 * 2 days, ~12-13 hours of presentations
 * Tentative Schedule:
-  * Background on CLEWS
-    * Theory (1 hour)
-    * Calibration / data requirements (1.5 hours)
-    * Example applications (0.5-1 hour)
-  * Background on OG-Core
-    * Theory (1 hour)
-    * Calibration / data requirements (1.5 hours)
-    * Example applications (0.5-1 hour)
-  * Describe illustrative example setup (1 hour)
-  * Describe how models link (1.5 hours)
-  * Describe results of illustrative example (1 hour)
-  * Brainstorming session of possible applications (1 hour)
+  * Day 1 (can switch oder of CLEWS/OG)
+    * Introduction to workshop (~ 30 minutes)
+    * Background on CLEWS (~ 3 hours total)
+      * Theory
+      * Calibration / data requirements
+      * Example applications
+    * Lunch
+    * Background on OG-Core (~ 3 hours total)
+      * Theory
+      * Calibration / data requirements
+      * Example applications
+  * Day 2:
+    * Describe illustrative example setup (1 hour)
+    * Describe how models link (1.5 hours)
+    * Lunch
+    * Describe results of illustrative example (1 hour)
+    * Brainstorming session of possible applications (~2 hours)
 
 ## Illustrative example:
 * [Philippine Energy Plan](https://legacy.doe.gov.ph/pep) for 2023 to 2050 (2023)
