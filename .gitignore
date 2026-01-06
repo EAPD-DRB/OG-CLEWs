@@ -45,4 +45,5 @@ docs/book/_build/*
 *ogphl_example_output.csv
 */OG-PHL-Example/*
 */OG-PHL-MultiExample/*
+*/PEP23_simulation_results/*
 *un_api_token.txt
