@@ -70,9 +70,11 @@ def main():
         "tau_c": [[p.tau_c[0][0]]],
         "alpha_c": np.array(list(alpha_c_dict.values())),
         "io_matrix": io_df.values,
-        "initial_guess_r_SS": 0.044,
-        "initial_guess_TR_SS": 0.123 * 0.2,
-        "initial_guess_factor_SS": 337283.0,
+        # The values below are the steady-state values, multiplied by factors
+        # that work on the first try for reason's we do not understand.
+        "initial_guess_r_SS": 0.050 * 1.2,
+        "initial_guess_TR_SS": 0.423 * 0.6,
+        "initial_guess_factor_SS": 144617.0,
     }
     p.update_specifications(updated_params)
 
@@ -102,16 +104,16 @@ def main():
     # Parameter change for the reform run: shock TFP for manufacturing
     updated_params_ref = {
         "Z": [
-            [1.0, 1.0],
-            [1.0, 1.01],
-            [1.0, 1.02],
-            [1.0, 1.03],
-            [1.0, 1.04],
-            [1.0, 1.05],
-            [1.0, 1.06],
-            [1.0, 1.07],
-            [1.0, 1.08],
-            [1.0, 1.09],
+            [1.0, 1.0, 1.0, 1.000],
+            [1.0, 1.0, 1.0, 1.005],
+            [1.0, 1.0, 1.0, 1.010],
+            [1.0, 1.0, 1.0, 1.015],
+            [1.0, 1.0, 1.0, 1.020],
+            [1.0, 1.0, 1.0, 1.025],
+            [1.0, 1.0, 1.0, 1.030],
+            [1.0, 1.0, 1.0, 1.035],
+            [1.0, 1.0, 1.0, 1.040],
+            [1.0, 1.0, 1.0, 1.045],
         ],
     }
     p2.update_specifications(updated_params_ref)
@@ -150,12 +152,12 @@ def main():
     op.plot_all(
         base_dir,
         reform_dir,
-        os.path.join(save_dir, "OG-PHL_MultiExample_plots"),
+        os.path.join(save_dir, "plots"),
     )
 
     print("Percentage changes in aggregates:", ans)
     # save percentage change output to csv file
-    ans.to_csv(os.path.join(save_dir, "OG-PHL_MultiExample_output.csv"))
+    ans.to_csv(os.path.join(save_dir, "output.csv"))
 
 
 if __name__ == "__main__":
