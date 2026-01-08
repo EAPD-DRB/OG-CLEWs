@@ -74,7 +74,7 @@ def main():
         # The values below are the steady-state values, multiplied by factors
         # that work on the first try for reason's we do not understand.
         "initial_guess_r_SS": 0.050 * 1.2,
-        "initial_guess_TR_SS": 0.423 * 0.6,
+        "initial_guess_TR_SS": 0.2, # 0.423 * 0.6,
         "initial_guess_factor_SS": 144617.0,
     }
     p.update_specifications(updated_params)
@@ -114,9 +114,10 @@ def main():
     print(
         "Pct of GDP for government investment increase: ", pct_gdp_investment
     )
-    new_alpha_G = p.alpha_G[:investment_horizon]
+    new_alpha_G = p.alpha_G[:investment_horizon + 1]
     for y in range(investment_horizon):
         new_alpha_G[y] += pct_gdp_investment
+    # Apply new alpha_G for first 10 years, then go back to baseline
 
     # Health beenfits
     pct_change_mortality = (
