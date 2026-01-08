@@ -3,6 +3,7 @@ This script simulates the 2023 Philippine Energy Plan (PEP).  Key features
 of the plan include:
 
 """
+
 import multiprocessing
 from distributed import Client
 import os
@@ -66,7 +67,7 @@ def main():
         "gamma_g": [p.gamma_g] * p.M,
         "epsilon": [p.epsilon] * p.M,
         "gamma": [p.gamma] * p.M,
-         "cit_rate": [[p.cit_rate[0][0]]],
+        "cit_rate": [[p.cit_rate[0][0]]],
         "tau_c": [[p.tau_c[0][0]]],
         "alpha_c": np.array(list(alpha_c_dict.values())),
         "io_matrix": io_df.values,
@@ -96,25 +97,72 @@ def main():
     p2.baseline = False
     p2.output_base = reform_dir
 
-    #TODO:
+    # TODO:
     # * Make TFP shock for electricity sector (2nd of 4 sectors) -- align with PEP targets/CLEW output
     # * Change alpha_G to approximate government investment plan in PEP (300-550B USD over 10 years)
     # * Change mortality and productivity/labor supply to align with impact of PEP on health outcomes
 
-    # Parameter change for the reform run: shock TFP for manufacturing
+    # Fiscal costs of energy transition
+    transition_investment_USD = 300  #  in billions
+    investment_horizon = (
+        10  # years over which investment spread (assume linear)
+    )
+    PHL_GDP = 461.6  # in billions USD, 2024 value (https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?locations=PH)
+    pct_gdp_investment = transition_investment_USD / (
+        PHL_GDP * investment_horizon
+    )
+    print(
+        "Pct of GDP for government investment increase: ", pct_gdp_investment
+    )
+    new_alpha_G = p.alpha_G[:investment_horizon]
+    for y in range(investment_horizon):
+        new_alpha_G[y] += pct_gdp_investment
+
+    # Health beenfits
+    pct_change_mortality = (
+        -0.01
+    )  # 1% reduction in mortality rates due to improved air quality
+    pct_change_productivity = (
+        0.005  # 0.5% increase in labor productivity due to better health
+    )
+    num_years_mort = 15  # years to phase in
+    num_years_prod = 15  # years to phase in
+    mort_J = 7  # max lifetime income group affected by mortality changes
+    prod_J = 7  # max lifetime income group affected by productivity changes
+    mort_benefits = np.linspace(0, pct_change_mortality, num_years_mort)
+    prod_benefits = np.linspace(0, pct_change_productivity, num_years_prod)
+    # productivity adjustments
+    for t, benefit in enumerate(prod_benefits):
+        p2.e[t, :, :prod_J] = p.e[t, :, :prod_J] * (1 + benefit)
+        p2.chi_n[t, :] = p.chi_n[t, :] * (1 - benefit)
+    p2.e[num_years_prod:, :, :prod_J] = p.e[num_years_prod:, :, :prod_J] * (
+        1 + pct_change_productivity
+    )
+    p2.chi_n[num_years_prod:, :] = p.chi_n[num_years_prod:, :] * (
+        1 - pct_change_productivity
+    )
+    # mortality adjustments
+    for t, benefit in enumerate(mort_benefits):
+        p2.rho[t, :-1, :mort_J] = p.rho[t, :-1, :mort_J] * (1 - benefit)
+    p2.rho[num_years_mort:, :-1, :mort_J] = p.rho[
+        num_years_mort:, :-1, :mort_J
+    ] * (1 - pct_change_mortality)
+
+    # Parameter changes for TFP and government spending
     updated_params_ref = {
-        "Z": [
-            [1.0, 1.0, 1.0, 1.000],
-            [1.0, 1.0, 1.0, 1.005],
-            [1.0, 1.0, 1.0, 1.010],
-            [1.0, 1.0, 1.0, 1.015],
-            [1.0, 1.0, 1.0, 1.020],
-            [1.0, 1.0, 1.0, 1.025],
-            [1.0, 1.0, 1.0, 1.030],
-            [1.0, 1.0, 1.0, 1.035],
-            [1.0, 1.0, 1.0, 1.040],
-            [1.0, 1.0, 1.0, 1.045],
+        "Z": [  # enery sector TFP decline as per CLEWS (higher input cost per KwH) -> but maybe it comes back up over time since large fixed costs of investment?
+            [1.0, 1.0, 1.0, 1.0],
+            [1.0, 0.99, 1.0, 1.0],
+            [1.0, 0.98, 1.0, 1.0],
+            [1.0, 0.97, 1.0, 1.0],
+            [1.0, 0.96, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
         ],
+        "alpha_G": new_alpha_G,
     }
     p2.update_specifications(updated_params_ref)
 
