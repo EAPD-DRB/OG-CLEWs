@@ -81,7 +81,7 @@ def main():
 
     # Run model
     start_time = time.time()
-    runner(p, time_path=True, client=client)
+    # runner(p, time_path=True, client=client)
     print("run time = ", time.time() - start_time)
     client.close()
 
@@ -103,7 +103,7 @@ def main():
     # * Change mortality and productivity/labor supply to align with impact of PEP on health outcomes
 
     # Fiscal costs of energy transition
-    transition_investment_USD = 300  #  in billions
+    transition_investment_USD = 300  # in billions
     investment_horizon = (
         10  # years over which investment spread (assume linear)
     )
@@ -141,11 +141,12 @@ def main():
     p2.chi_n[num_years_prod:, :] = p.chi_n[num_years_prod:, :] * (
         1 - pct_change_productivity
     )
-    # mortality adjustments
-    for t, benefit in enumerate(mort_benefits):
-        p2.rho[t, :-1] = p.rho[t, :-1] * (1 - benefit)
-    p2.rho[num_years_mort:, :-1] = p.rho[
-        num_years_mort:, :-1] * (1 - pct_change_mortality)
+    # # mortality adjustments
+    # for t, benefit in enumerate(mort_benefits):
+    #     p2.rho[t, :-1] = p.rho[t, :-1] * (1 - benefit)
+    # p2.rho[num_years_mort:, :-1] = p.rho[
+    #     num_years_mort:, :-1] * (1 - pct_change_mortality)
+    ### NEED to run mortality changes through demographic model first before applying here ###
 
     # Parameter changes for TFP and government spending
     updated_params_ref = {
