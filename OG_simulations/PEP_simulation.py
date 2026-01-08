@@ -128,7 +128,6 @@ def main():
     )
     num_years_mort = 15  # years to phase in
     num_years_prod = 15  # years to phase in
-    mort_J = 7  # max lifetime income group affected by mortality changes
     prod_J = 7  # max lifetime income group affected by productivity changes
     mort_benefits = np.linspace(0, pct_change_mortality, num_years_mort)
     prod_benefits = np.linspace(0, pct_change_productivity, num_years_prod)
@@ -144,10 +143,9 @@ def main():
     )
     # mortality adjustments
     for t, benefit in enumerate(mort_benefits):
-        p2.rho[t, :-1, :mort_J] = p.rho[t, :-1, :mort_J] * (1 - benefit)
-    p2.rho[num_years_mort:, :-1, :mort_J] = p.rho[
-        num_years_mort:, :-1, :mort_J
-    ] * (1 - pct_change_mortality)
+        p2.rho[t, :-1] = p.rho[t, :-1] * (1 - benefit)
+    p2.rho[num_years_mort:, :-1] = p.rho[
+        num_years_mort:, :-1] * (1 - pct_change_mortality)
 
     # Parameter changes for TFP and government spending
     updated_params_ref = {
