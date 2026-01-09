@@ -6,21 +6,26 @@ Integration of the CLEWS and OG-CORE models
 * Tentative Schedule:
   * Day 1 (can switch oder of CLEWS/OG)
     * Introduction to workshop (~ 30 minutes)
-    * Background on CLEWS (~ 3 hours total)
-      * Theory
-      * Calibration / data requirements
-      * Example applications
-    * Lunch
     * Background on OG-Core (~ 3 hours total)
       * Theory
       * Calibration / data requirements
       * Example applications
-  * Day 2:
-    * Describe illustrative example setup (1 hour)
-    * Describe how models link (1.5 hours)
     * Lunch
-    * Describe results of illustrative example (1 hour)
-    * Brainstorming session of possible applications (~2 hours)
+    * Background on CLEWS (~ 3 hours total)
+      * Theory
+      * Calibration / data requirements
+      * Example applications
+  * Day 2:
+    * Describe policy experiment from "[Philippine Energy Plan 2023 - 2050, Volume 1](https://legacy.doe.gov.ph/sites/default/files/pdf/pep/PEP%202023-2050%20Vol.%20I.pdf)" (10 min)
+    * Describe overview of this particular run sequence: (1) CLEWS, (2) OG-PHL, (3) CLEWS, (4) Describe the output we have in the end (10 min)
+    * Highlight the ways in which we should update the calibrations, but show that these are pretty well calibrated (15 min)
+    * Describe setup and initial run of CLEWS and output (30 min)
+    * Describe passage of data from CLEWS to OG-PHL and initial OG-PHL run (30 min)
+    * Describe passage of demand data back to CLEWS and final output (30 min)
+    * Lunch
+    * Review final output, how models link, and alternative workflows (30 min)
+    * Brainstorming session of possible applications (1 hour)
+    * Wrap of brainstorming session, next steps, further resources (1 hour)
 
 ## Illustrative example:
 * [Philippine Energy Plan](https://legacy.doe.gov.ph/pep) for 2023 to 2050 (2023)
