@@ -6,8 +6,8 @@ Integration of the CLEWS and OG-CORE models
 * Tentative Schedule:
   * Day 1 (can switch oder of CLEWS/OG)
     * Introduction to workshop (~ 30 minutes)
-    * Background on OG-Core (~ 3 hours total)
-      * Point Parcipants to OG-PHL GitHub code and documentation sites.
+    * Background on OG-Core and OG-PHL (~ 3 hours total)
+      * Point Parcipants to OG-Core and OG-PHL GitHub code and documentation sites.
         * Show that slides from 5-day workshop are on the documentation site (need to do this)
       * Model and Theory. Make this a combination of 1_OG-Core-GeneralDescription1_RickJason and OG-PHL-inputoutput
       * Calibration / data requirements. Make this a combination of 3_OG-PHL-CurrentState_Jason and 7_OG-PHL-Data_Jason, highlighting the pieces that interface with CLEWS (TFP, mortality rates, productivity)
