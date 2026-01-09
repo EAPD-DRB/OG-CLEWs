@@ -3,6 +3,7 @@ This script simulates the 2023 Philippine Energy Plan (PEP).  Key features
 of the plan include:
 
 """
+
 import multiprocessing
 from distributed import Client
 import os
@@ -21,6 +22,11 @@ from ogphl import input_output as io
 
 # import some constants from calibration_values.py
 from calibration_values import PROD_DICT
+# import get_pop_data module
+import get_pop_data
+
+
+UN_COUNTRY_CODE = "608"  # Philippines
 
 # Use a custom matplotlib style file for plots
 plt.style.use("ogcore.OGcorePlots")
@@ -66,17 +72,32 @@ def main():
         "gamma_g": [p.gamma_g] * p.M,
         "epsilon": [p.epsilon] * p.M,
         "gamma": [p.gamma] * p.M,
-         "cit_rate": [[p.cit_rate[0][0]]],
+        "cit_rate": [[p.cit_rate[0][0]]],
         "tau_c": [[p.tau_c[0][0]]],
         "alpha_c": np.array(list(alpha_c_dict.values())),
         "io_matrix": io_df.values,
         # The values below are the steady-state values, multiplied by factors
         # that work on the first try for reason's we do not understand.
         "initial_guess_r_SS": 0.050 * 1.2,
-        "initial_guess_TR_SS": 0.423 * 0.6,
+        "initial_guess_TR_SS": 0.2, # 0.423 * 0.6,
         "initial_guess_factor_SS": 144617.0,
     }
     p.update_specifications(updated_params)
+
+    # get baseline population data (rather than use what is in JSON)
+    (
+        pop_dict,
+        pop_dist,
+        pre_pop_dist,
+        fert_rates,
+        mort_rates,
+        infmort_rates,
+        imm_rates,
+        baseline_deaths,
+    ) = get_pop_data.baseline_pop(p, un_country_code=UN_COUNTRY_CODE, download=False)
+    p.update_specifications(pop_dict)
+
+    print(f"Baseline dealths = {baseline_deaths[10:15, :].sum()}")
 
     # Run model
     start_time = time.time()
@@ -96,25 +117,86 @@ def main():
     p2.baseline = False
     p2.output_base = reform_dir
 
-    #TODO:
-    # * Make TFP shock for electricity sector (2nd of 4 sectors) -- align with PEP targets/CLEW output
-    # * Change alpha_G to approximate government investment plan in PEP (300-550B USD over 10 years)
-    # * Change mortality and productivity/labor supply to align with impact of PEP on health outcomes
+    #################
+    # Fiscal costs of energy transition
+    #################
+    transition_investment_USD = 300  # in billions
+    investment_horizon = (
+        10  # years over which investment spread (assume linear)
+    )
+    PHL_GDP = 461.6  # in billions USD, 2024 value (https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?locations=PH)
+    pct_gdp_investment = transition_investment_USD / (
+        PHL_GDP * investment_horizon
+    )
+    print(
+        "Pct of GDP for government investment increase: ", pct_gdp_investment
+    )
+    new_alpha_G = p.alpha_G[:investment_horizon + 1]
+    for y in range(investment_horizon):
+        new_alpha_G[y] += pct_gdp_investment
+    # Apply new alpha_G for first T years, then go back to baseline
 
-    # Parameter change for the reform run: shock TFP for manufacturing
+    #################
+    # Health benefits affecting productivity and labor supply
+    #################
+    pct_change_productivity = (
+        0.005  # 0.5% increase in labor productivity due to better health
+    )
+    num_years_prod = 15  # years to phase in
+    prod_J = 7  # max lifetime income group affected by productivity changes
+    prod_benefits = np.linspace(0, pct_change_productivity, num_years_prod)
+    # productivity adjustments
+    for t, benefit in enumerate(prod_benefits):
+        p2.e[t, :, :prod_J] = p.e[t, :, :prod_J] * (1 + benefit)
+        p2.chi_n[t, :] = p.chi_n[t, :] * (1 - benefit)
+    p2.e[num_years_prod:, :, :prod_J] = p.e[num_years_prod:, :, :prod_J] * (
+        1 + pct_change_productivity
+    )
+    p2.chi_n[num_years_prod:, :] = p.chi_n[num_years_prod:, :] * (
+        1 - pct_change_productivity
+    )
+
+    #################
+    # Health benefits affecting mortality
+    #################
+    # Find new population with excess deaths
+    num_years_mort = 15  # years to phase in
+    pct_change_mortality = (
+        -0.01
+    )  # 1% reduction in mortality rates due to improved air quality
+    new_pop_dict, PEP_deaths = get_pop_data.health_pop(
+        p2,
+        pop_dist,
+        pre_pop_dist,
+        fert_rates,
+        mort_rates,
+        infmort_rates,
+        imm_rates,
+        UN_COUNTRY_CODE,
+        mort_effect=pct_change_mortality,
+        time_horizon=num_years_mort,
+    )
+    p2.update_specifications(new_pop_dict)
+
+    print(f"PEP dealths = {PEP_deaths[10:15, :].sum()}")
+
+    #################
+    # Parameter changes for TFP and government spending
+    #################
     updated_params_ref = {
-        "Z": [
-            [1.0, 1.0, 1.0, 1.000],
-            [1.0, 1.0, 1.0, 1.005],
-            [1.0, 1.0, 1.0, 1.010],
-            [1.0, 1.0, 1.0, 1.015],
-            [1.0, 1.0, 1.0, 1.020],
-            [1.0, 1.0, 1.0, 1.025],
-            [1.0, 1.0, 1.0, 1.030],
-            [1.0, 1.0, 1.0, 1.035],
-            [1.0, 1.0, 1.0, 1.040],
-            [1.0, 1.0, 1.0, 1.045],
+        "Z": [  # energy sector TFP decline as per CLEWS (higher input cost per KwH) -> but maybe it comes back up over time since large fixed costs of investment?
+            [1.0, 1.0, 1.0, 1.0],
+            [1.0, 0.99, 1.0, 1.0],
+            [1.0, 0.98, 1.0, 1.0],
+            [1.0, 0.97, 1.0, 1.0],
+            [1.0, 0.96, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.95, 1.0, 1.0],
         ],
+        "alpha_G": new_alpha_G,
     }
     p2.update_specifications(updated_params_ref)
 
