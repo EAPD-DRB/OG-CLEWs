@@ -81,8 +81,8 @@ reform_dir = os.path.join(
 
 # CLEWS output paths
 # Define file paths
-clews_base_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v6-Base")
-clews_pep_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v6-PEP")
+clews_base_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v8-Base")
+clews_pep_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v8-PEP")
 
 # Cost of electricity generation files
 base_cost_file = os.path.join(
