@@ -1,0 +1,87 @@
+\mode<presentation>
+{
+  \usetheme{Darmstadt}
+  \definecolor{BYUBlue}{RGB}{00,22,55}
+  \definecolor{BYUTan}{RGB}{232,211,175}
+  \usecolortheme[named=BYUBlue]{structure}
+  \setbeamercolor*{palette primary}{use=structure,fg=BYUBlue,bg=lightgray}
+  \setbeamercolor*{palette quaternary}{fg=white,bg=lightgray!0!BYUBlue}
+  \setbeamercolor{frametitle}{fg=BYUBlue,bg=BYUBlue!10}
+  \setbeamertemplate{items}[circle]
+  \setbeamertemplate{blocks}[rounded][shadow=True]
+  \setbeamertemplate{navigations symbols}{circle}
+}
+
+\usepackage{graphics}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{forest}
+\usepackage{subfigure}
+\usepackage{caption}
+\captionsetup{labelformat=empty}% redefines the caption setup of the figures environment in the beamer class.
+\usepackage[T1]{fontenc}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{threeparttable}
+\usepackage{multirow}
+\usepackage{amsthm}
+\usepackage{float,graphicx,color}
+\usepackage{graphics}
+\usepackage{multicol}
+\usepackage{natbib}
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{colorlinks, urlcolor=blue}
+\usepackage{threeparttable}
+% \usepackage[format=hang,font=normalsize,labelfont=bf]{caption}
+% \usepackage{subcaption}
+\usepackage{delarray}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{placeins}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{animate}
+\usepackage{bm}
+\usepackage{amsmath,bm}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\newtheorem*{thm}{Theorem}
+\theoremstyle{definition}
+\newtheorem*{defn}{Definition}
+\newcommand\ve{\varepsilon}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator*{\argmin}{argmin}
+
+% Python code blocks --------------------------------------
+\usepackage{pythonhighlight}
+\usepackage{tcolorbox}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
