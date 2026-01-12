@@ -86,19 +86,16 @@ clews_pep_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v8-PEP")
 
 # Cost of electricity generation files
 base_cost_file = os.path.join(
-    clews_base_dir, "260110_Cost of electricity generation_PHL_Base_v8_updated.xlsx"
+    clews_base_dir,
+    "260110_Cost of electricity generation_PHL_Base_v8_updated.xlsx",
 )
 pep_cost_file = os.path.join(
     clews_pep_dir, "260111_Cost of electricity generation_PHL_PEP_v8.xlsx"
 )
 
 # Emissions files
-base_emissions_file = os.path.join(
-    clews_base_dir, "Base-v8-Emissions.xlsx"
-)
-pep_emissions_file = os.path.join(
-    clews_pep_dir, "PEP-v8-Emissions.xlsx"
-)
+base_emissions_file = os.path.join(clews_base_dir, "Base-v8-Emissions.xlsx")
+pep_emissions_file = os.path.join(clews_pep_dir, "PEP-v8-Emissions.xlsx")
 
 # set constants
 TIME_HORIZON = 50  # years to plot
@@ -154,13 +151,17 @@ io_df.to_latex(
     label="tab:PEP_IO_Table",
     float_format="%.3f",
 )
-# TODO: fix error here -- need indeX?
-# pd.DataFrame.from_dict(alpha_c_dict).to_latex(
-#     os.path.join(table_dir, "PEP_alpha_c_Table.tex"),
-#     caption="$\\alpha_c$ values used for Multi-Industry Calibration in PEP Simulation",
-#     label="tab:PEP_alpha_c_Table",
-#     float_format="%.3f",
-# )
+pd.DataFrame.from_dict(
+    {
+        "Cons. Category": list(alpha_c_dict.keys()),
+        "Exp. Share": list(alpha_c_dict.values()),
+    }
+).to_latex(
+    os.path.join(table_dir, "PEP_alpha_c_Table.tex"),
+    caption="$\\alpha_c$ values used for Multi-Industry Calibration in PEP Simulation",
+    label="tab:PEP_alpha_c_Table",
+    float_format="%.3f",
+)
 
 # Plot TFP of the energy sector over time (50 years)
 years = np.arange(
