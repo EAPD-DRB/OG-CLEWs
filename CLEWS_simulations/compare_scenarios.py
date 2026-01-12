@@ -9,16 +9,16 @@ import numpy as np
 from pathlib import Path
 
 # Define file paths
-BASE_DIR = Path("v6-Base")
-PEP_DIR = Path("v6-PEP")
+BASE_DIR = Path("v8-Base")
+PEP_DIR = Path("v8-PEP")
 
 # Cost of electricity generation files
-base_cost_file = BASE_DIR / "260108_Cost of electricity generation_PHL_Base_v2.xlsx"
-pep_cost_file = PEP_DIR / "260108_Cost of electricity generation_PHL_PEP_v2.xlsx"
+base_cost_file = BASE_DIR / "260110_Cost of electricity generation_PHL_Base_v8_updated.xlsx"
+pep_cost_file = PEP_DIR / "260111_Cost of electricity generation_PHL_PEP_v8.xlsx"
 
 # Emissions files
-base_emissions_file = BASE_DIR / "260108_Emissions_Base_Sc.xlsx"
-pep_emissions_file = PEP_DIR / "260108_Emissions_PEP_Sc.xlsx"
+base_emissions_file = BASE_DIR / "Base-v8-Emissions.xlsx"
+pep_emissions_file = PEP_DIR / "PEP-v8-Emissions.xlsx"
 
 
 def read_cost_data(file_path, sheet_name, row_index=5):
@@ -178,11 +178,11 @@ def create_plots():
     print("Reading data files...")
 
     # Cost of electricity generation
-    base_cost = read_cost_data(base_cost_file, 'Grid_cost_Base', row_index=5)
+    base_cost = read_cost_data(base_cost_file, 'Grid_cost_Base_v8', row_index=5)
     pep_cost = read_cost_data(pep_cost_file, 'Grid_cost_PEP', row_index=5)
 
     # Investments
-    base_investments = read_investments_data(base_cost_file, 'Investments_Base')
+    base_investments = read_investments_data(base_cost_file, 'Investments_Base_v8')
     pep_investments = read_investments_data(pep_cost_file, 'Investments_PEP')
 
     # Emissions
