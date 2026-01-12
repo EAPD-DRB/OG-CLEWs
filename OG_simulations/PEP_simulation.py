@@ -71,7 +71,7 @@ def main():
     updated_params = {
         "tG1": 50,
         "start_year": 2026,
-        "etr_params": [[0.18]],
+        "etr_params": [[[0.18]]],
         "tau_bq": [0.0],
         "debt_ratio_ss": 1.2,
         "gamma_g": [p.gamma_g] * p.M,
@@ -113,7 +113,7 @@ def main():
 
     # Run model
     start_time = time.time()
-    # runner(p, time_path=True, client=client)
+    runner(p, time_path=True, client=client)
     print("run time = ", time.time() - start_time)
     client.close()
 
@@ -257,7 +257,7 @@ def main():
 
     # Run model
     start_time = time.time()
-    # runner(p2, time_path=True, client=client)
+    runner(p2, time_path=True, client=client)
     print("run time = ", time.time() - start_time)
     client.close()
 
