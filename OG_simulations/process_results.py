@@ -86,18 +86,18 @@ clews_pep_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v8-PEP")
 
 # Cost of electricity generation files
 base_cost_file = os.path.join(
-    clews_base_dir, "260108_Cost of electricity generation_PHL_Base_v2.xlsx"
+    clews_base_dir, "260110_Cost of electricity generation_PHL_Base_v8_updated.xlsx"
 )
 pep_cost_file = os.path.join(
-    clews_pep_dir, "260108_Cost of electricity generation_PHL_PEP_v2.xlsx"
+    clews_pep_dir, "260111_Cost of electricity generation_PHL_PEP_v8.xlsx"
 )
 
 # Emissions files
 base_emissions_file = os.path.join(
-    clews_base_dir, "260108_Emissions_Base_Sc.xlsx"
+    clews_base_dir, "Base-v8-Emissions.xlsx"
 )
 pep_emissions_file = os.path.join(
-    clews_pep_dir, "260108_Emissions_PEP_Sc.xlsx"
+    clews_pep_dir, "PEP-v8-Emissions.xlsx"
 )
 
 # set constants
