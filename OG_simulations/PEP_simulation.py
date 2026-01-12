@@ -73,7 +73,7 @@ def main():
         "start_year": 2026,
         "etr_params": [[0.18]],
         "tau_bq": [0.0],
-        "debt_ratio_SS": 1.2,
+        "debt_ratio_ss": 1.2,
         "gamma_g": [p.gamma_g] * p.M,
         "epsilon": [p.epsilon] * p.M,
         "gamma": [p.gamma] * p.M,
