@@ -100,7 +100,7 @@ def main():
         infmort_rates,
         imm_rates,
         baseline_deaths,
-    ) = get_pop_data.baseline_pop(p, un_country_code=UN_COUNTRY_CODE, download=True)
+    ) = get_pop_data.baseline_pop(p, un_country_code=UN_COUNTRY_CODE, download=False)
     p.update_specifications(pop_dict)
 
     print(f"Baseline dealths = {baseline_deaths[10:15, :].sum()}")
