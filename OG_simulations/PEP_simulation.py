@@ -69,17 +69,23 @@ def main():
     alpha_c_dict = io.get_alpha_c()
     io_df = io.get_io_matrix(prod_dict=PROD_DICT)
     updated_params = {
+        "tG1": 50,
+        "start_year": 2026,
+        "etr_params": [[0.18]],
+        "tau_bq": [0.0],
+        "debt_ratio_SS": 1.2,
         "gamma_g": [p.gamma_g] * p.M,
         "epsilon": [p.epsilon] * p.M,
         "gamma": [p.gamma] * p.M,
         "cit_rate": [[p.cit_rate[0][0]]],
         "tau_c": [[p.tau_c[0][0]]],
         "alpha_c": np.array(list(alpha_c_dict.values())),
+        "c_min": np.array([0.05, 0.004, 0.007, 0.03, 0.08]),
         "io_matrix": io_df.values,
         # The values below are the steady-state values, multiplied by factors
         # that work on the first try for reason's we do not understand.
         "initial_guess_r_SS": 0.050 * 1.2,
-        "initial_guess_TR_SS": 0.2, # 0.423 * 0.6,
+        "initial_guess_TR_SS": 0.2,  # 0.423 * 0.6,
         "initial_guess_factor_SS": 144617.0,
     }
     p.update_specifications(updated_params)
@@ -94,7 +100,7 @@ def main():
         infmort_rates,
         imm_rates,
         baseline_deaths,
-    ) = get_pop_data.baseline_pop(p, un_country_code=UN_COUNTRY_CODE, download=False)
+    ) = get_pop_data.baseline_pop(p, un_country_code=UN_COUNTRY_CODE, download=True)
     p.update_specifications(pop_dict)
 
     print(f"Baseline dealths = {baseline_deaths[10:15, :].sum()}")
@@ -126,28 +132,57 @@ def main():
     #################
     # Fiscal costs of energy transition
     #################
-    transition_investment_USD = 300  # in billions
+    transition_investment_USD = 300 * 0.1  # in billions, assumed gov't cost about 10% of all investment (see PEP docs)
     investment_horizon = (
-        10  # years over which investment spread (assume linear)
+        20  # years over which investment spread (assume linear), PEP plan suggests this may be longer
     )
     PHL_GDP = 461.6  # in billions USD, 2024 value (https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?locations=PH)
-    pct_gdp_investment = transition_investment_USD / (
-        PHL_GDP * investment_horizon
-    )
+    # spread out investment over time with it front loaded and smoothly declining
+    investment_profile = np.array([
+        71.47383123,
+        82.13856462,
+        31.91362223,
+        28.13425372,
+        21.95610587,
+        18.06133707,
+        19.16543852,
+        21.03081355,
+        17.22572634,
+        12.70885258,
+        10.44593532,
+        9.573177303,
+        8.891963878,
+        8.323563844,
+        7.471094661,
+        6.764190725,
+        6.242713866,
+        5.882017178,
+        4.923950646,
+        4.923950646,
+        4.923950646,
+        4.923950646,
+        4.923950646,
+        0
+    ])
+    # put in percent of total investment over the period
+    investment_profile = investment_profile / investment_profile.sum()
+    # scale to total investment amount
+    pct_gdp_investment = (transition_investment_USD * investment_profile) / PHL_GDP
     print(
         "Pct of GDP for government investment increase: ", pct_gdp_investment
     )
     new_alpha_G = p.alpha_G[:investment_horizon + 1]
     for y in range(investment_horizon):
-        new_alpha_G[y] += pct_gdp_investment
+        new_alpha_G[y] += pct_gdp_investment[y]
     # Apply new alpha_G for first T years, then go back to baseline
 
     #################
     # Health benefits affecting productivity and labor supply
     #################
     pct_change_productivity = (
-        0.005  # 0.5% increase in labor productivity due to better health
+        0.15/0.5 * 0.03  # increase in labor productivity due to better health, 15% decline in PM2.5
     )
+    # roughly based on https://docs.iza.org/dp8916.pdf who find about 50% change in PM2.5 leads to 3% decline in productivity
     num_years_prod = 15  # years to phase in
     prod_J = 7  # max lifetime income group affected by productivity changes
     prod_benefits = np.linspace(0, pct_change_productivity, num_years_prod)
@@ -168,8 +203,10 @@ def main():
     # Find new population with excess deaths
     num_years_mort = 15  # years to phase in
     pct_change_mortality = (
-        -0.01
-    )  # 1% reduction in mortality rates due to improved air quality
+        -0.06
+    )  # reduction in mortality rates due to improved air quality, PM2.5 down about 15% or about 10 ug/m3
+    # Roughly based on https://pmc.ncbi.nlm.nih.gov/articles/PMC2801178/
+    # find that 26% increase in mort rates for 10-μg/m3 increase in PM2.5
     new_pop_dict, PEP_deaths = get_pop_data.health_pop(
         p2,
         pop_dist,
@@ -207,6 +244,11 @@ def main():
             [1.0, 0.95, 1.0, 1.0],
             [1.0, 0.95, 1.0, 1.0],
             [1.0, 0.95, 1.0, 1.0],
+            [1.0, 0.97, 1.0, 1.0],
+            [1.0, 0.99, 1.0, 1.0],
+            [1.0, 1.0, 1.0, 1.0],
+            [1.0, 1.01, 1.0, 1.0],
+            [1.0, 1.02, 1.0, 1.0],
         ],
         "alpha_G": new_alpha_G,
         "RC_SS": 3e-4,   # temporary increase in error tolerance -- some issue with demographics when change mortality
