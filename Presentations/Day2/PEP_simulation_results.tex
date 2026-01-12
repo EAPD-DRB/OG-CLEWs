@@ -1,0 +1,314 @@
+\documentclass{beamer}
+\input{../preamble.tex}
+
+\title[OG-PHL PEP Simulation]{OG-PHL: PEP Simulation Results}
+
+\author[DeBacker and Evans]{\textbf{Jason DeBacker} \inst{1} \and \textbf{Richard W. Evans} \inst{2}}
+\institute[shortinst]{\inst{1} University of South Carolina, Department of Economics \and
+\inst{2} Abundance Institute, Open Research Group, Inc.}
+
+\date[Short Occasion]{\textbf{January 15, 2026} \\ United Nations, Philippines}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\section{Overview}
+
+\begin{frame}
+  \frametitle{PEP Simulation Overview}
+
+  \begin{itemize}
+    \item The Philippines Energy Plan (PEP) 2023 simulation models the economic and health impacts of energy sector transitions
+    \item We compare a baseline scenario to the PEP 2023 scenario over a 50-year time horizon
+    \item Key dimensions analyzed:
+      \begin{itemize}
+        \item Energy sector parametrization (TFP, costs, investments)
+        \item Environmental outcomes (CO2e, PM2.5)
+        \item Health impacts (mortality rates, deaths averted)
+        \item Macroeconomic effects (GDP, capital, consumption, labor)
+        \item Fiscal implications (government spending, debt)
+        \item Distributional impacts (prices, income by ability group)
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\section{Calibration Tables and Figures}
+
+\begin{frame}
+  \frametitle{Input-Output Table for Multi-Industry Calibration}
+
+  \begin{itemize}
+    \item Input-output table used for multi-industry calibration in PEP simulation
+  \end{itemize}
+
+  \input{./tables/PEP_IO_Table.tex}
+\end{frame}
+
+
+\section{Parametrization of PEP}
+
+\begin{frame}
+  \frametitle{Energy Sector TFP over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_Energy_Sector_TFP.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Cost of Electricity Generation over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_Cost_of_Electricity_Generation.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Government Spending over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_G_over_Y.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Annualized Investments over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_Annualized_Investments.png}
+  \end{figure}
+\end{frame}
+
+
+\section{Environmental Outcomes}
+
+\begin{frame}
+  \frametitle{CO2e Emissions over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_CO2e_Emissions.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{PM2.5 Concentration over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_PM2.5_Concentration.png}
+  \end{figure}
+\end{frame}
+
+
+\section{Health Impact Profiles}
+
+\begin{frame}
+  \frametitle{Ability Profiles in Baseline and PEP}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/ability_profiles.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Chi\_n Profiles in Baseline and PEP}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/chi_n_values.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Mortality Rates in Baseline and PEP}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/mortality_rates.png}
+  \end{figure}
+\end{frame}
+
+
+\section{OG Model Outcomes: Health}
+
+\begin{frame}
+  \frametitle{Annual Deaths over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_Annual_Deaths.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Cumulative Deaths Averted over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_Cumulative_Deaths_Averted.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Labor Supply over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_deaths_over_time.png}
+  \end{figure}
+\end{frame}
+
+
+\section{OG Model Outcomes: Macro}
+
+\begin{frame}
+  \frametitle{Aggregate Variables over Time}
+
+  \begin{itemize}
+    \item Percentage changes in capital (K), output (Y), consumption (C), and labor (L)
+  \end{itemize}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.65\textheight]{./images/PEP_agg_over_time.png}
+  \end{figure}
+\end{frame}
+
+
+\section{OG Model Outcomes: Fiscal}
+
+\begin{frame}
+  \frametitle{Debt-to-GDP Ratio over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_D_over_Y.png}
+  \end{figure}
+\end{frame}
+
+
+\section{OG Model Outcomes: Distributional}
+
+\begin{frame}
+  \frametitle{Percentage Change in Consumption Good Prices}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/pct_change_p_i.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Percentage Change in Production Good Prices}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/pct_change_p_m.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Price of Electricity}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/price_of_electricity_plot.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Percentage Change in Labor Supply by Ability Group}
+
+  \begin{itemize}
+    \item Changes 10-20 years after policy implementation
+  \end{itemize}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.65\textheight]{./images/pct_change_n_by_J.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Percentage Change in Income by Ability Group}
+
+  \begin{itemize}
+    \item Changes 10-20 years after policy implementation
+  \end{itemize}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.65\textheight]{./images/pct_change_before_tax_income_by_J.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Percentage Change in Consumption by Ability Group}
+
+  \begin{itemize}
+    \item Changes 10-20 years after policy implementation
+  \end{itemize}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.65\textheight]{./images/pct_change_c_by_J.png}
+  \end{figure}
+\end{frame}
+
+
+\section{Summary}
+
+\begin{frame}
+  \frametitle{Key Findings}
+
+  \begin{itemize}
+    \item Energy Transition:
+      \begin{itemize}
+        \item PEP scenario shows increased energy sector TFP over time
+        \item Lower electricity generation costs in PEP scenario
+        \item Significant upfront investments required
+      \end{itemize}
+    \item Environmental Benefits:
+      \begin{itemize}
+        \item Reduced CO2e emissions
+        \item Lower PM2.5 concentrations
+      \end{itemize}
+    \item Health Impacts:
+      \begin{itemize}
+        \item Improved survival rates and lower mortality
+        \item Substantial cumulative deaths averted
+        \item Increased labor supply due to better health
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Key Findings (continued)}
+
+  \begin{itemize}
+    \item Macroeconomic Effects:
+      \begin{itemize}
+        \item Positive impacts on capital, output, consumption, and labor
+      \end{itemize}
+    \item Fiscal Implications:
+      \begin{itemize}
+        \item Government spending increases for energy investments
+        \item Changes in debt-to-GDP ratio
+      \end{itemize}
+    \item Distributional Effects:
+      \begin{itemize}
+        \item Changes in relative prices across sectors
+        \item Electricity prices adjust over time
+        \item Differential impacts across ability groups
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\end{document}
