@@ -98,10 +98,16 @@ def main():
     p.update_specifications(pop_dict)
 
     print(f"Baseline dealths = {baseline_deaths[10:15, :].sum()}")
+    # save baseline_deaths array to csv file
+    np.savetxt(
+        os.path.join(base_dir, "baseline_deaths.csv"),
+        baseline_deaths,
+        delimiter=",",
+    )
 
     # Run model
     start_time = time.time()
-    runner(p, time_path=True, client=client)
+    # runner(p, time_path=True, client=client)
     print("run time = ", time.time() - start_time)
     client.close()
 
@@ -179,6 +185,12 @@ def main():
     p2.update_specifications(new_pop_dict)
 
     print(f"PEP dealths = {PEP_deaths[10:15, :].sum()}")
+    # save PEP_deaths array to csv file
+    np.savetxt(
+        os.path.join(base_dir, "PEP_deaths.csv"),
+        PEP_deaths,
+        delimiter=",",
+    )
 
     #################
     # Parameter changes for TFP and government spending
@@ -197,12 +209,13 @@ def main():
             [1.0, 0.95, 1.0, 1.0],
         ],
         "alpha_G": new_alpha_G,
+        "RC_SS": 3e-4,   # temporary increase in error tolerance -- some issue with demographics when change mortality
     }
     p2.update_specifications(updated_params_ref)
 
     # Run model
     start_time = time.time()
-    runner(p2, time_path=True, client=client)
+    # runner(p2, time_path=True, client=client)
     print("run time = ", time.time() - start_time)
     client.close()
 
