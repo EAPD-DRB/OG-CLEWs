@@ -101,6 +101,8 @@ pep_emissions_file = os.path.join(
 )
 
 # set constants
+TIME_HORIZON = 50  # years to plot
+NUM_YEARS_NPV = 100
 # To get GDP in levels, can use # Source: https://governance.neda.gov.ph/govt-cuts-growth-target-to-6-7-neda/
 NEDA_Forecast = np.array(
     [
@@ -127,7 +129,13 @@ NEDA_Forecast = np.array(
         106.6471678,
     ]
 )  # Units are Trillions of PHP
-TIME_HORIZON = 50  # years to plot
+# use last period's growth rate to extend to NUM_YEARS_NPV
+last_growth_rate = NEDA_Forecast[-1] / NEDA_Forecast[-2]
+for i in range(NUM_YEARS_NPV - len(NEDA_Forecast)):
+    NEDA_Forecast = np.append(
+        NEDA_Forecast, NEDA_Forecast[-1] * last_growth_rate
+    )
+
 # read in parameters and output
 base_params = safe_read_pickle(os.path.join(base_dir, "model_params.pkl"))
 reform_params = safe_read_pickle(os.path.join(reform_dir, "model_params.pkl"))
@@ -356,7 +364,25 @@ op.plot_aggregates(
     path=os.path.join(plot_dir, "PEP_agg_over_time.png"),
 )
 
-# TODO: * Table with NPV of GDP effects (100 years, under different discount rates -- compare with NPV of assumed investment)
+# * Table with NPV of GDP effects (100 years, under different discount rates -- compare with NPV of assumed investment)
+pct_change_gdp = (
+    reform_tpi["Y"][:NUM_YEARS_NPV] - base_tpi["Y"][:NUM_YEARS_NPV]
+) / base_tpi["Y"][:NUM_YEARS_NPV]
+GDP_diff = pct_change_gdp * NEDA_Forecast[:NUM_YEARS_NPV]
+NPV_dict = {"Discount Rate": [], "NPV of GDP Effect (Trillions PHP)": []}
+for r in [0.01, 0.02, 0.03, 0.04, 0.05]:
+    npv = (
+        GDP_diff / ((1 + r) ** (np.arange(NUM_YEARS_NPV))[:, np.newaxis])
+    ).sum()
+    NPV_dict["Discount Rate"].append(r)
+    NPV_dict["NPV of GDP Effect (Trillions PHP)"].append(npv)
+npv_df = pd.DataFrame(NPV_dict)
+npv_df.to_latex(
+    os.path.join(table_dir, "PEP_NPV_GDP_Effects_Table.tex"),
+    caption="NPV of GDP Effects under Different Discount Rates",
+    label="tab:PEP_NPV_GDP_Effects_Table",
+    float_format="%.3f",
+)
 
 # Fiscal:
 # * Plot D/Y in baseline and PEP
@@ -370,7 +396,29 @@ op.plot_gdp_ratio(
     path=os.path.join(plot_dir, "PEP_D_over_Y.png"),
 )
 
-# TODO: * Could we look at tax/Y then convert to levels (using Y forcast above) and get NPV of revenue -- this would give the marginal value of public funds for energy investment
+# * NPV of tax revenue effects (100 years, under different discount rates)
+change_TY = (
+    reform_tpi["total_tax_revenue"][:NUM_YEARS_NPV]
+    / reform_tpi["Y"][:NUM_YEARS_NPV]
+) - (
+    base_tpi["total_tax_revenue"][:NUM_YEARS_NPV]
+    / base_tpi["Y"][:NUM_YEARS_NPV]
+)
+tax_diff = change_TY * NEDA_Forecast[:NUM_YEARS_NPV]
+NPV_dict = {"Discount Rate": [], "NPV of Tax Revenue (Trillions PHP)": []}
+for r in [0.01, 0.02, 0.03, 0.04, 0.05]:
+    npv = (
+        tax_diff / ((1 + r) ** (np.arange(NUM_YEARS_NPV))[:, np.newaxis])
+    ).sum()
+    NPV_dict["Discount Rate"].append(r)
+    NPV_dict["NPV of Tax Revenue (Trillions PHP)"].append(npv)
+npv_df = pd.DataFrame(NPV_dict)
+npv_df.to_latex(
+    os.path.join(table_dir, "PEP_NPV_Tax_Revenue_Effects_Table.tex"),
+    caption="NPV of Tax Revenue Effects under Different Discount Rates",
+    label="tab:PEP_NPV_Tax_Revenue_Effects_Table",
+    float_format="%.3f",
+)
 
 # Distributional:
 # * Plot pct change in p_i over time
