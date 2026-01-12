@@ -22,6 +22,7 @@ from ogphl import input_output as io
 
 # import some constants from calibration_values.py
 from calibration_values import PROD_DICT
+
 # import get_pop_data module
 import get_pop_data
 
@@ -100,7 +101,9 @@ def main():
         infmort_rates,
         imm_rates,
         baseline_deaths,
-    ) = get_pop_data.baseline_pop(p, un_country_code=UN_COUNTRY_CODE, download=False)
+    ) = get_pop_data.baseline_pop(
+        p, un_country_code=UN_COUNTRY_CODE, download=False
+    )
     p.update_specifications(pop_dict)
 
     print(f"Baseline dealths = {baseline_deaths[10:15, :].sum()}")
@@ -132,46 +135,50 @@ def main():
     #################
     # Fiscal costs of energy transition
     #################
-    transition_investment_USD = 300 * 0.1  # in billions, assumed gov't cost about 10% of all investment (see PEP docs)
-    investment_horizon = (
-        20  # years over which investment spread (assume linear), PEP plan suggests this may be longer
-    )
+    transition_investment_USD = (
+        300 * 0.1
+    )  # in billions, assumed gov't cost about 10% of all investment (see PEP docs)
+    investment_horizon = 20  # years over which investment spread (assume linear), PEP plan suggests this may be longer
     PHL_GDP = 461.6  # in billions USD, 2024 value (https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?locations=PH)
     # spread out investment over time with it front loaded and smoothly declining
-    investment_profile = np.array([
-        71.47383123,
-        82.13856462,
-        31.91362223,
-        28.13425372,
-        21.95610587,
-        18.06133707,
-        19.16543852,
-        21.03081355,
-        17.22572634,
-        12.70885258,
-        10.44593532,
-        9.573177303,
-        8.891963878,
-        8.323563844,
-        7.471094661,
-        6.764190725,
-        6.242713866,
-        5.882017178,
-        4.923950646,
-        4.923950646,
-        4.923950646,
-        4.923950646,
-        4.923950646,
-        0
-    ])
+    investment_profile = np.array(
+        [
+            71.47383123,
+            82.13856462,
+            31.91362223,
+            28.13425372,
+            21.95610587,
+            18.06133707,
+            19.16543852,
+            21.03081355,
+            17.22572634,
+            12.70885258,
+            10.44593532,
+            9.573177303,
+            8.891963878,
+            8.323563844,
+            7.471094661,
+            6.764190725,
+            6.242713866,
+            5.882017178,
+            4.923950646,
+            4.923950646,
+            4.923950646,
+            4.923950646,
+            4.923950646,
+            0,
+        ]
+    )
     # put in percent of total investment over the period
     investment_profile = investment_profile / investment_profile.sum()
     # scale to total investment amount
-    pct_gdp_investment = (transition_investment_USD * investment_profile) / PHL_GDP
+    pct_gdp_investment = (
+        transition_investment_USD * investment_profile
+    ) / PHL_GDP
     print(
         "Pct of GDP for government investment increase: ", pct_gdp_investment
     )
-    new_alpha_G = p.alpha_G[:investment_horizon + 1]
+    new_alpha_G = p.alpha_G[: investment_horizon + 1]
     for y in range(investment_horizon):
         new_alpha_G[y] += pct_gdp_investment[y]
     # Apply new alpha_G for first T years, then go back to baseline
@@ -180,7 +187,9 @@ def main():
     # Health benefits affecting productivity and labor supply
     #################
     pct_change_productivity = (
-        0.15/0.5 * 0.03  # increase in labor productivity due to better health, 15% decline in PM2.5
+        0.15
+        / 0.5
+        * 0.03  # increase in labor productivity due to better health, 15% decline in PM2.5
     )
     # roughly based on https://docs.iza.org/dp8916.pdf who find about 50% change in PM2.5 leads to 3% decline in productivity
     num_years_prod = 15  # years to phase in
@@ -251,7 +260,7 @@ def main():
             [1.0, 1.02, 1.0, 1.0],
         ],
         "alpha_G": new_alpha_G,
-        "RC_SS": 3e-4,   # temporary increase in error tolerance -- some issue with demographics when change mortality
+        "RC_SS": 3e-4,  # temporary increase in error tolerance -- some issue with demographics when change mortality
     }
     p2.update_specifications(updated_params_ref)
 

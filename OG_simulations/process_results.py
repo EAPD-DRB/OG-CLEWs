@@ -42,6 +42,7 @@ Distributional:
 
 
 """
+
 # imports
 import os
 import matplotlib.pyplot as plt
@@ -54,7 +55,12 @@ from ogcore.utils import safe_read_pickle
 from ogphl import input_output as io
 from calibration_values import PROD_DICT
 from ogphl.input_output import CONS_DICT
-from CLEWS_data import read_cost_data, read_investments_data, read_emissions_data, calculate_percentage_change
+from CLEWS_data import (
+    read_cost_data,
+    read_investments_data,
+    read_emissions_data,
+    calculate_percentage_change,
+)
 
 
 # set plot style
@@ -69,7 +75,9 @@ if not os.path.exists(table_dir):
     os.makedirs(table_dir)
 # set base and reform directories
 base_dir = os.path.join(CUR_DIR, "PEP23_simulation_results", "OUTPUT_BASELINE")
-reform_dir = os.path.join(CUR_DIR, "PEP23_simulation_results", "OUTPUT_PEP2023")
+reform_dir = os.path.join(
+    CUR_DIR, "PEP23_simulation_results", "OUTPUT_PEP2023"
+)
 
 # CLEWS output paths
 # Define file paths
@@ -77,24 +85,48 @@ clews_base_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v6-Base")
 clews_pep_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v6-PEP")
 
 # Cost of electricity generation files
-base_cost_file = os.path.join(clews_base_dir, "260108_Cost of electricity generation_PHL_Base_v2.xlsx")
-pep_cost_file = os.path.join(clews_pep_dir, "260108_Cost of electricity generation_PHL_PEP_v2.xlsx")
+base_cost_file = os.path.join(
+    clews_base_dir, "260108_Cost of electricity generation_PHL_Base_v2.xlsx"
+)
+pep_cost_file = os.path.join(
+    clews_pep_dir, "260108_Cost of electricity generation_PHL_PEP_v2.xlsx"
+)
 
 # Emissions files
-base_emissions_file = os.path.join(clews_base_dir, "260108_Emissions_Base_Sc.xlsx")
-pep_emissions_file = os.path.join(clews_pep_dir, "260108_Emissions_PEP_Sc.xlsx")
+base_emissions_file = os.path.join(
+    clews_base_dir, "260108_Emissions_Base_Sc.xlsx"
+)
+pep_emissions_file = os.path.join(
+    clews_pep_dir, "260108_Emissions_PEP_Sc.xlsx"
+)
 
 # set constants
-#To get GDP in levels, can use # Source: https://governance.neda.gov.ph/govt-cuts-growth-target-to-6-7-neda/
-NEDA_Forecast = np.array([
-    26.55, 28.27575, 30.2550525, 32.44854381,
-    34.80106323, 37.32414032, 40.03014049,
-    42.93232567, 46.04491929, 49.38317593,
-    52.96345619, 56.80330676, 60.9215465,
-    65.33835863, 70.07538963, 75.15585537,
-    80.60465489, 86.44849237, 92.71600806,
-    99.43791865, 106.6471678
-    ])  # Units are Trillions of PHP
+# To get GDP in levels, can use # Source: https://governance.neda.gov.ph/govt-cuts-growth-target-to-6-7-neda/
+NEDA_Forecast = np.array(
+    [
+        26.55,
+        28.27575,
+        30.2550525,
+        32.44854381,
+        34.80106323,
+        37.32414032,
+        40.03014049,
+        42.93232567,
+        46.04491929,
+        49.38317593,
+        52.96345619,
+        56.80330676,
+        60.9215465,
+        65.33835863,
+        70.07538963,
+        75.15585537,
+        80.60465489,
+        86.44849237,
+        92.71600806,
+        99.43791865,
+        106.6471678,
+    ]
+)  # Units are Trillions of PHP
 TIME_HORIZON = 50  # years to plot
 # read in parameters and output
 base_params = safe_read_pickle(os.path.join(base_dir, "model_params.pkl"))
@@ -123,7 +155,9 @@ io_df.to_latex(
 # )
 
 # Plot TFP of the energy sector over time (50 years)
-years = np.arange(base_params.start_year, base_params.start_year + TIME_HORIZON)
+years = np.arange(
+    base_params.start_year, base_params.start_year + TIME_HORIZON
+)
 tfp = base_params.Z[:TIME_HORIZON, 1]  # energy sector is index 1
 plt.figure()
 plt.plot(years, tfp, label="Baseline TFP")
@@ -137,17 +171,19 @@ plt.savefig(os.path.join(plot_dir, "PEP_Energy_Sector_TFP.png"), dpi=300)
 plt.close()
 
 # * Plot kWh cost from CLEWS over time (baseline and PEP)
-base_cost = read_cost_data(base_cost_file, 'Grid_cost_Base', row_index=5)
-pep_cost = read_cost_data(pep_cost_file, 'Grid_cost_PEP', row_index=5)
+base_cost = read_cost_data(base_cost_file, "Grid_cost_Base", row_index=5)
+pep_cost = read_cost_data(pep_cost_file, "Grid_cost_PEP", row_index=5)
 plt.figure()
-plt.plot(base_cost.index, base_cost.values, label='Baseline Cost')
-plt.plot(pep_cost.index, pep_cost.values, label='PEP Cost')
-plt.xlabel('Year')
-plt.ylabel('Cost (USD/kWh)')
-plt.title('Cost of Electricity Generation over Time')
+plt.plot(base_cost.index, base_cost.values, label="Baseline Cost")
+plt.plot(pep_cost.index, pep_cost.values, label="PEP Cost")
+plt.xlabel("Year")
+plt.ylabel("Cost (USD/kWh)")
+plt.title("Cost of Electricity Generation over Time")
 plt.legend()
 plt.grid()
-plt.savefig(os.path.join(plot_dir, "PEP_Cost_of_Electricity_Generation.png"), dpi=300)
+plt.savefig(
+    os.path.join(plot_dir, "PEP_Cost_of_Electricity_Generation.png"), dpi=300
+)
 plt.close()
 
 # Plot government spending over time
@@ -162,28 +198,34 @@ op.plot_gdp_ratio(
 )
 
 # * Plot investment from CLEWS over time (baseline and PEP)
-base_investments = read_investments_data(base_cost_file, 'Investments_Base')
-pep_investments = read_investments_data(pep_cost_file, 'Investments_PEP')
+base_investments = read_investments_data(base_cost_file, "Investments_Base")
+pep_investments = read_investments_data(pep_cost_file, "Investments_PEP")
 plt.figure()
-plt.plot(base_investments.index, base_investments.values, label='Baseline Investments')
-plt.plot(pep_investments.index, pep_investments.values, label='PEP Investments')
-plt.xlabel('Year')
-plt.ylabel('Investments (Million USD)')
-plt.title('Annualized Investments over Time')
+plt.plot(
+    base_investments.index,
+    base_investments.values,
+    label="Baseline Investments",
+)
+plt.plot(
+    pep_investments.index, pep_investments.values, label="PEP Investments"
+)
+plt.xlabel("Year")
+plt.ylabel("Investments (Million USD)")
+plt.title("Annualized Investments over Time")
 plt.legend()
 plt.grid()
 plt.savefig(os.path.join(plot_dir, "PEP_Annualized_Investments.png"), dpi=300)
 plt.close()
 
 # * Plot C02 emissions over time (50 years) baseline and PEP
-base_co2e = read_emissions_data(base_emissions_file, 'CO2e')
-pep_co2e = read_emissions_data(pep_emissions_file, 'CO2e')
+base_co2e = read_emissions_data(base_emissions_file, "CO2e")
+pep_co2e = read_emissions_data(pep_emissions_file, "CO2e")
 plt.figure()
-plt.plot(base_co2e.index, base_co2e.values, label='Baseline CO2e Emissions')
-plt.plot(pep_co2e.index, pep_co2e.values, label='PEP CO2e Emissions')
-plt.xlabel('Year')
-plt.ylabel('CO2e Emissions (tons)')
-plt.title('CO2e Emissions over Time')
+plt.plot(base_co2e.index, base_co2e.values, label="Baseline CO2e Emissions")
+plt.plot(pep_co2e.index, pep_co2e.values, label="PEP CO2e Emissions")
+plt.xlabel("Year")
+plt.ylabel("CO2e Emissions (tons)")
+plt.title("CO2e Emissions over Time")
 plt.legend()
 plt.grid()
 plt.savefig(os.path.join(plot_dir, "PEP_CO2e_Emissions.png"), dpi=300)
@@ -191,14 +233,16 @@ plt.close()
 
 
 # * Plot PM2.5 concentrations over time (50 years) baseline and PEP
-base_pm25 = read_emissions_data(base_emissions_file, 'PM2_5')
-pep_pm25 = read_emissions_data(pep_emissions_file, 'PM2_5')
+base_pm25 = read_emissions_data(base_emissions_file, "PM2_5")
+pep_pm25 = read_emissions_data(pep_emissions_file, "PM2_5")
 plt.figure()
-plt.plot(base_pm25.index, base_pm25.values, label='Baseline PM2.5 Concentration')
-plt.plot(pep_pm25.index, pep_pm25.values, label='PEP PM2.5 Concentration')
-plt.xlabel('Year')
-plt.ylabel('PM2.5 Concentration (ug/m3)')
-plt.title('PM2.5 Concentration over Time')
+plt.plot(
+    base_pm25.index, base_pm25.values, label="Baseline PM2.5 Concentration"
+)
+plt.plot(pep_pm25.index, pep_pm25.values, label="PEP PM2.5 Concentration")
+plt.xlabel("Year")
+plt.ylabel("PM2.5 Concentration (ug/m3)")
+plt.title("PM2.5 Concentration over Time")
 plt.legend()
 plt.grid()
 plt.savefig(os.path.join(plot_dir, "PEP_PM2.5_Concentration.png"), dpi=300)
@@ -250,8 +294,12 @@ reform_deaths = np.loadtxt(
 )
 # * Plot deaths over time in baseline and PEP by year (50 years)
 plt.figure()
-years = np.arange(base_params.start_year, base_params.start_year + TIME_HORIZON)
-plt.plot(years, base_deaths[:TIME_HORIZON, :].sum(axis=1), label="Baseline Deaths")
+years = np.arange(
+    base_params.start_year, base_params.start_year + TIME_HORIZON
+)
+plt.plot(
+    years, base_deaths[:TIME_HORIZON, :].sum(axis=1), label="Baseline Deaths"
+)
 plt.plot(
     years,
     reform_deaths[:TIME_HORIZON, :].sum(axis=1),
@@ -268,15 +316,20 @@ plt.close()
 plt.figure()
 plt.plot(
     years,
-    (base_deaths[:TIME_HORIZON, :].sum(axis=1) - reform_deaths[:TIME_HORIZON, :].sum(axis=1)).cumsum(),
-    label="Cumulative Deaths Averted (Baseline - PEP)"
+    (
+        base_deaths[:TIME_HORIZON, :].sum(axis=1)
+        - reform_deaths[:TIME_HORIZON, :].sum(axis=1)
+    ).cumsum(),
+    label="Cumulative Deaths Averted (Baseline - PEP)",
 )
 plt.xlabel("Year")
 plt.ylabel("Number of Deaths Averted")
 plt.title("Cumulative Deaths Averted over Time")
 plt.legend()
 plt.grid()
-plt.savefig(os.path.join(plot_dir, "PEP_Cumulative_Deaths_Averted.png"), dpi=300)
+plt.savefig(
+    os.path.join(plot_dir, "PEP_Cumulative_Deaths_Averted.png"), dpi=300
+)
 plt.close()
 # * Plot pct change in L over time
 op.plot_aggregates(
@@ -325,32 +378,36 @@ fig, ax = plt.subplots()
 for i in range(base_params.I):
     ax.plot(
         years,
-        (reform_tpi["p_i"][:TIME_HORIZON, i] - base_tpi["p_i"][:TIME_HORIZON, i]) / base_tpi["p_i"][:TIME_HORIZON, i],
-        label=list(CONS_DICT.keys())[i]
+        (
+            reform_tpi["p_i"][:TIME_HORIZON, i]
+            - base_tpi["p_i"][:TIME_HORIZON, i]
+        )
+        / base_tpi["p_i"][:TIME_HORIZON, i],
+        label=list(CONS_DICT.keys())[i],
     )
 ax.set_xlabel("Year")
 ax.set_ylabel("Percentage Change in Prices")
 ax.legend()
 # save fig
-fig.savefig(
-    os.path.join(plot_dir, "pct_change_p_i.png"), dpi=300
-)
+fig.savefig(os.path.join(plot_dir, "pct_change_p_i.png"), dpi=300)
 
 # * Plot pct change in p_m over time
 fig, ax = plt.subplots()
 for m in range(base_params.M):
     ax.plot(
         years,
-        (reform_tpi["p_m"][:TIME_HORIZON, m] - base_tpi["p_m"][:TIME_HORIZON, m]) / base_tpi["p_m"][:TIME_HORIZON, m],
-        label=list(PROD_DICT.keys())[m]
+        (
+            reform_tpi["p_m"][:TIME_HORIZON, m]
+            - base_tpi["p_m"][:TIME_HORIZON, m]
+        )
+        / base_tpi["p_m"][:TIME_HORIZON, m],
+        label=list(PROD_DICT.keys())[m],
     )
 ax.set_xlabel("Year")
 ax.set_ylabel("Percentage Change in Prices")
 ax.legend()
 # save fig
-fig.savefig(
-    os.path.join(plot_dir, "pct_change_p_m.png"), dpi=300
-)
+fig.savefig(os.path.join(plot_dir, "pct_change_p_m.png"), dpi=300)
 
 # * Plot price of electricity
 fig, ax = plt.subplots()
@@ -372,9 +429,7 @@ ax.set_xlabel("Year")
 ax.set_ylabel("Price of Electricity")
 ax.legend()
 # save fig
-fig.savefig(
-    os.path.join(plot_dir, "price_of_electricity_plot.png"), dpi=300
-)
+fig.savefig(os.path.join(plot_dir, "price_of_electricity_plot.png"), dpi=300)
 
 # * Plot pct change in n by ability group (10-20 years out)
 op.ability_bar(
