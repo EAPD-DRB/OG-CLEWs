@@ -81,7 +81,8 @@ def main():
         "cit_rate": [[p.cit_rate[0][0]]],
         "tau_c": [[p.tau_c[0][0]]],
         "alpha_c": np.array(list(alpha_c_dict.values())),
-        "c_min": np.array([0.05, 0.004, 0.007, 0.03, 0.08]),
+        "c_min": np.zeros(p.I),
+        # "c_min": np.array([0.05, 0.004, 0.007, 0.03, 0.08]),
         "io_matrix": io_df.values,
         # The values below are the steady-state values, multiplied by factors
         # that work on the first try for reason's we do not understand.
@@ -230,7 +231,7 @@ def main():
     )
     p2.update_specifications(new_pop_dict)
 
-    print(f"PEP dealths = {PEP_deaths[10:15, :].sum()}")
+    print(f"PEP deaths = {PEP_deaths[10:15, :].sum()}")
     # save PEP_deaths array to csv file
     np.savetxt(
         os.path.join(base_dir, "PEP_deaths.csv"),
