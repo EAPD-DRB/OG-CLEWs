@@ -8,22 +8,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 
-# Define file paths
-BASE_DIR = Path("v6-Base")
-PEP_DIR = Path("v6-PEP")
-
-# Cost of electricity generation files
-base_cost_file = (
-    BASE_DIR / "260108_Cost of electricity generation_PHL_Base_v2.xlsx"
-)
-pep_cost_file = (
-    PEP_DIR / "260108_Cost of electricity generation_PHL_PEP_v2.xlsx"
-)
-
-# Emissions files
-base_emissions_file = BASE_DIR / "260108_Emissions_Base_Sc.xlsx"
-pep_emissions_file = PEP_DIR / "260108_Emissions_PEP_Sc.xlsx"
-
 
 def read_cost_data(file_path, sheet_name, row_index=5):
     """
@@ -240,6 +224,27 @@ def create_plots():
     ax1.set_xlim(cost_pct_change.index.min(), cost_pct_change.index.max())
 
     # Plot 2: Total Annualized Investments
+    ax2 = axes[0, 1]
+    ax2.plot(
+        investments_pct_change.index,
+        investments_pct_change.values,
+        marker="s",
+        linewidth=2,
+        markersize=4,
+        color="#A23B72",
+    )
+    ax2.axhline(y=0, color="gray", linestyle="--", linewidth=1)
+    ax2.set_xlabel("Year", fontsize=12)
+    ax2.set_ylabel("Percentage Change (%)", fontsize=12)
+    ax2.set_title(
+        "Total Annualized Investments (Million USD)",
+        fontsize=13,
+        fontweight="bold",
+    )
+    ax2.grid(True, alpha=0.3)
+    ax2.set_xlim(
+        investments_pct_change.index.min(), investments_pct_change.index.max()
+    )
     ax2 = axes[0, 1]
     ax2.plot(
         investments_pct_change.index,
