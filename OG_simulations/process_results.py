@@ -180,7 +180,7 @@ plt.savefig(os.path.join(plot_dir, "PEP_Energy_Sector_TFP.png"), dpi=300)
 plt.close()
 
 # * Plot kWh cost from CLEWS over time (baseline and PEP)
-base_cost = read_cost_data(base_cost_file, "Grid_cost_Base", row_index=5)
+base_cost = read_cost_data(base_cost_file, "Grid_cost_Base_v8", row_index=5)
 pep_cost = read_cost_data(pep_cost_file, "Grid_cost_PEP", row_index=5)
 plt.figure()
 plt.plot(base_cost.index, base_cost.values, label="Baseline Cost")
