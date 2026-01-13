@@ -202,12 +202,13 @@ op.plot_gdp_ratio(
     reform_tpi,
     reform_params,
     var_list=["G"],
+    start_year=base_params.start_year,
     num_years_to_plot=TIME_HORIZON,
     path=os.path.join(plot_dir, "PEP_G_over_Y.png"),
 )
 
 # * Plot investment from CLEWS over time (baseline and PEP)
-base_investments = read_investments_data(base_cost_file, "Investments_Base")
+base_investments = read_investments_data(base_cost_file, "Investments_Base_v8")
 pep_investments = read_investments_data(pep_cost_file, "Investments_PEP")
 plt.figure()
 plt.plot(
@@ -348,6 +349,7 @@ op.plot_aggregates(
     reform_params,
     var_list=["L"],
     stationarized=False,
+    start_year=base_params.start_year,
     num_years_to_plot=TIME_HORIZON,
     path=os.path.join(plot_dir, "PEP_deaths_over_time.png"),
 )
@@ -361,6 +363,7 @@ op.plot_aggregates(
     reform_params,
     var_list=["K", "Y", "C", "L"],
     stationarized=False,
+    start_year=base_params.start_year,
     num_years_to_plot=TIME_HORIZON,
     path=os.path.join(plot_dir, "PEP_agg_over_time.png"),
 )
@@ -393,6 +396,7 @@ op.plot_gdp_ratio(
     reform_tpi,
     reform_params,
     var_list=["D"],
+    start_year=base_params.start_year,
     num_years_to_plot=TIME_HORIZON,
     path=os.path.join(plot_dir, "PEP_D_over_Y.png"),
 )
