@@ -72,9 +72,9 @@ def main():
     updated_params = {
         "tG1": 50,
         "start_year": 2026,
-        "etr_params": [[[0.18]]],
+        "etr_params": [[[0.25]]],
         "tau_bq": [0.0],
-        "debt_ratio_ss": 1.2,
+        "debt_ratio_ss": 1.5,
         "gamma_g": [p.gamma_g] * p.M,
         "epsilon": [p.epsilon] * p.M,
         "gamma": [p.gamma] * p.M,
