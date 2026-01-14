@@ -79,6 +79,7 @@ reform_dir = os.path.join(
     CUR_DIR, "PEP23_simulation_results", "OUTPUT_PEP2023"
 )
 
+
 # CLEWS output paths
 # Define file paths
 clews_base_dir = os.path.join(CUR_DIR, "..", "CLEWS_simulations", "v8-Base")
@@ -138,6 +139,13 @@ base_params = safe_read_pickle(os.path.join(base_dir, "model_params.pkl"))
 reform_params = safe_read_pickle(os.path.join(reform_dir, "model_params.pkl"))
 base_tpi = safe_read_pickle(os.path.join(base_dir, "TPI", "TPI_vars.pkl"))
 reform_tpi = safe_read_pickle(os.path.join(reform_dir, "TPI", "TPI_vars.pkl"))
+
+
+print(
+    "DY ratio = ",
+    reform_tpi["D"][:TIME_HORIZON] / reform_tpi["Y"][:TIME_HORIZON],
+)
+
 
 ################
 # Calibration Tables and Figures
@@ -308,16 +316,18 @@ years = np.arange(
     base_params.start_year, base_params.start_year + TIME_HORIZON
 )
 plt.plot(
-    years, base_deaths[:TIME_HORIZON, :].sum(axis=1), label="Baseline Deaths"
+    years,
+    base_deaths[:TIME_HORIZON, :].sum(axis=1) / 1e6,
+    label="Baseline Deaths",
 )
 plt.plot(
     years,
-    reform_deaths[:TIME_HORIZON, :].sum(axis=1),
+    reform_deaths[:TIME_HORIZON, :].sum(axis=1) / 1e6,
     label="PEP Deaths",
 )
 plt.xlabel("Year")
-plt.ylabel("Number of Deaths")
-plt.title("Annual Deaths over Time")
+plt.ylabel("Number of Deaths (Millions)")
+# plt.title("Annual Deaths over Time")
 plt.legend()
 plt.grid()
 plt.savefig(os.path.join(plot_dir, "PEP_Annual_Deaths.png"), dpi=300)
@@ -327,14 +337,17 @@ plt.figure()
 plt.plot(
     years,
     (
-        base_deaths[:TIME_HORIZON, :].sum(axis=1)
-        - reform_deaths[:TIME_HORIZON, :].sum(axis=1)
+        (
+            base_deaths[:TIME_HORIZON, :].sum(axis=1)
+            - reform_deaths[:TIME_HORIZON, :].sum(axis=1)
+        )
+        / 1e6
     ).cumsum(),
-    label="Cumulative Deaths Averted (Baseline - PEP)",
+    label="Cumulative Deaths Averted ((Baseline - PEP))",
 )
 plt.xlabel("Year")
-plt.ylabel("Number of Deaths Averted")
-plt.title("Cumulative Deaths Averted over Time")
+plt.ylabel("Number of Deaths Averted (Millions)")
+# plt.title("Cumulative Deaths Averted over Time")
 plt.legend()
 plt.grid()
 plt.savefig(
@@ -389,6 +402,16 @@ npv_df.to_latex(
 )
 
 # Fiscal:
+# read in data again
+base_params = safe_read_pickle(os.path.join(base_dir, "model_params.pkl"))
+reform_params = safe_read_pickle(os.path.join(reform_dir, "model_params.pkl"))
+base_tpi = safe_read_pickle(os.path.join(base_dir, "TPI", "TPI_vars.pkl"))
+reform_tpi = safe_read_pickle(os.path.join(reform_dir, "TPI", "TPI_vars.pkl"))
+print(
+    "DY ratio = ",
+    reform_tpi["D"][:TIME_HORIZON] / reform_tpi["Y"][:TIME_HORIZON],
+)
+
 # * Plot D/Y in baseline and PEP
 op.plot_gdp_ratio(
     base_tpi,
@@ -404,7 +427,7 @@ op.plot_gdp_ratio(
 # * NPV of tax revenue effects (100 years, under different discount rates)
 change_TY = (
     reform_tpi["total_tax_revenue"][:NUM_YEARS_NPV]
-    / reform_tpi["Y"][:NUM_YEARS_NPV]
+    / base_tpi["Y"][:NUM_YEARS_NPV]
 ) - (
     base_tpi["total_tax_revenue"][:NUM_YEARS_NPV]
     / base_tpi["Y"][:NUM_YEARS_NPV]
