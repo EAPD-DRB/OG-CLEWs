@@ -98,8 +98,6 @@ Food & 0.357 \\
   \end{figure}
 \end{frame}
 
-% TODO:  add slide here with summary of gov't investments
-% and note that private investment is endogenous in OG-PHL model
 \begin{frame}
   \frametitle{OG-PHL: Energy Sector TFP over Time}
   \begin{figure}[htb]\centering
@@ -107,6 +105,18 @@ Food & 0.357 \\
   \end{figure}
 \end{frame}
 
+
+
+\begin{frame}
+  \frametitle{PEP23 Investments}
+  \begin{itemize}
+    \item PEP23 estimates total investments of 19.6-27.8 trillion PHP over 2023-2050
+    \item This includes both government and private investments
+    \item Government investments (both direct and via incentives and partnerships) are about 10\% of this total
+    \item For our OG-PHL simulation, we assume government investments of 2.6 trillion PHP, spread over 27 years
+    \item Private investment in endogenous in OG-PHL
+  \end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{CLEWs: Annualized Investments over Time}
@@ -130,7 +140,7 @@ Food & 0.357 \\
 \section{Env. Outcomes}
 
 \begin{frame}
-  \frametitle{CLEWs: CO2e Emissions over Time}
+  \frametitle{CLEWs: CO2 Emissions over Time}
 
   \begin{figure}[htb]\centering
     \includegraphics[height=0.75\textheight]{./images/PEP_CO2e_Emissions.png}
@@ -149,8 +159,21 @@ Food & 0.357 \\
 
 \section{Health Impacts}
 
-% # TODO add slide with literature on how PM2.5 affects productivity rates
-% # and note mapping on quantiative effects
+
+\begin{frame}
+  \frametitle{Mapping PM2.5 to Labor Productivity}
+
+  \begin{itemize}
+    \item There are strong links in the literature between air pollution (PM2.5) and economic outcomes, including labor productivity
+    \item He, Liu, and Salvo (\emph{AEJ: Applied}, 2019) find that a \textbf{50\% decline in PM2.5 reduces productivity by 3\%}
+    \item We use this mapping to adjust key productivity parameters in OG-PHL:
+      \begin{itemize}
+        \item Ability profiles
+        \item Disutility of labor parameters
+      \end{itemize}
+    \item CLEWS finds a 15\% reduction in PM2.5 under PEP scenario, leading to a 0.9\% increase in productivity
+  \end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{Ability Profiles in Baseline and PEP}
@@ -161,9 +184,6 @@ Food & 0.357 \\
 \end{frame}
 
 
-% # TODO: add slide with mapping of PM2.5 to absenteeism (or just comment out next slide)
-
-
 \begin{frame}
   \frametitle{Disutility of Labor in Baseline and PEP}
 
@@ -172,6 +192,21 @@ Food & 0.357 \\
   \end{figure}
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{Mapping PM2.5 to Mortality}
+
+  \begin{itemize}
+    \item A substantial scientific literature establishing a link between air pollution (PM2.5) and mortality:
+      \begin{itemize}
+        \item Pope et al. (\emph{Air Quality, Atmosphere, and Health}, 2017): 6-34\% change in mortality per  10$\mu$g/m$^3$ change in PM2.5
+        \item Kim et al. (\emph{Environmental Health}, 2021):  10$\mu$g/m$^3$ increase in in PM2.5 lowers life expectancy by 0.7-0.9 years
+        \item Puett et al. (\emph{Environmental Health Perspectives}, 2009): 10$\mu$g/m$^3$ increase in PM2.5 leads to 4\% increase in all-cause mortality risk
+      \end{itemize}
+    \item We take the estimates of Pope et al. (\emph{Air Quality, Atmosphere, and Health}, 2017) to map PM2.5 concentrations to mortality risk
+    \item The decrease in PM2.5 under the PEP scenario is about 10$\mu$g/m$^3$, which we map to a conservative 4\% decrease in mortality risk
+  \end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{Mortality Baseline and PEP}
