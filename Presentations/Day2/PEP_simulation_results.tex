@@ -32,56 +32,94 @@
         \item Health impacts (mortality rates, deaths averted)
         \item Macroeconomic effects (GDP, capital, consumption, labor)
         \item Fiscal implications (government spending, debt)
-        \item Distributional impacts (prices, income by ability group)
+        \item Distributional impacts (prices, consumption, income, labor supply)
       \end{itemize}
   \end{itemize}
 \end{frame}
 
 
-\section{Calibration Tables and Figures}
+\section{Baseline Calibration}
 
 \begin{frame}
   \frametitle{Input-Output Table for Multi-Industry Calibration}
 
-  \begin{itemize}
-    \item Input-output table used for multi-industry calibration in PEP simulation
-  \end{itemize}
+  \begin{table}
+    \small
+\label{tab:PEP_IO_Table}
+\begin{tabular}{lcccc}
+\hline
+\hline
+ & Natural & Electricity & Construction, & Manu. \\
+  & Resources &  & Trade, Services &  \\
+\hline
+Food & 0.120 & 0.000 & 0.202 & 0.679 \\
+Energy \& water & 0.021 & 0.107 & 0.329 & 0.543 \\
+Non-durables & 0.043 & 0.006 & 0.628 & 0.323 \\
+Durables & 0.011 & 0.011 & 0.236 & 0.743 \\
+Services & 0.041 & 0.003 & 0.772 & 0.185 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
 
-  \input{./tables/PEP_IO_Table.tex}
 \end{frame}
 
 
-\section{Parametrization of PEP}
-
 \begin{frame}
-  \frametitle{Energy Sector TFP over Time}
-
-  \begin{figure}[htb]\centering
-    \includegraphics[height=0.75\textheight]{./images/PEP_Energy_Sector_TFP.png}
-  \end{figure}
+  \frametitle{Consumption Category Shares for Multi-Industry Calibration}
+\begin{table}
+% \caption{$\alpha_c$ values used for Multi-Industry Calibration in PEP Simulation}
+\label{tab:PEP_alpha_c_Table}
+\begin{tabular}{lc}
+\hline
+\hline
+ Consumption & Expenditure \\
+ Category & Share \\
+\hline
+Food & 0.357 \\
+ Energy and water & 0.014 \\
+ Non-durables & 0.021 \\
+ Durables & 0.103 \\
+ Services & 0.505 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
 \end{frame}
 
 
+\section{TFP and Invest.}
+
 \begin{frame}
-  \frametitle{Cost of Electricity Generation over Time}
+  \frametitle{CLEWs: Cost of Electricity Generation over Time}
 
   \begin{figure}[htb]\centering
     \includegraphics[height=0.75\textheight]{./images/PEP_Cost_of_Electricity_Generation.png}
   \end{figure}
 \end{frame}
 
-
 \begin{frame}
-  \frametitle{Government Spending over Time}
-
+  \frametitle{OG-PHL: Energy Sector TFP over Time}
   \begin{figure}[htb]\centering
-    \includegraphics[height=0.75\textheight]{./images/PEP_G_over_Y.png}
+    \includegraphics[height=0.75\textheight]{./images/PEP_Energy_Sector_TFP.png}
   \end{figure}
 \end{frame}
 
 
+
 \begin{frame}
-  \frametitle{Annualized Investments over Time}
+  \frametitle{PEP23 Investments}
+  \begin{itemize}
+    \item PEP23 estimates total investments of 19.6-27.8 trillion PHP over 2023-2050
+    \item This includes both government and private investments
+    \item Government investments (both direct and via incentives and partnerships) are about 10\% of this total
+    \item For our OG-PHL simulation, we assume government investments of 2.6 trillion PHP, spread over 27 years
+    \item Private investment in endogenous in OG-PHL
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{CLEWs: Annualized Investments over Time}
 
   \begin{figure}[htb]\centering
     \includegraphics[height=0.75\textheight]{./images/PEP_Annualized_Investments.png}
@@ -89,10 +127,20 @@
 \end{frame}
 
 
-\section{Environmental Outcomes}
+\begin{frame}
+  \frametitle{OG-PHL: Government Spending over Time}
+
+  \begin{figure}[htb]\centering
+    \includegraphics[height=0.75\textheight]{./images/PEP_G_over_Y.png}
+  \end{figure}
+\end{frame}
+
+
+
+\section{Env. Outcomes}
 
 \begin{frame}
-  \frametitle{CO2e Emissions over Time}
+  \frametitle{CLEWs: CO2 Emissions over Time}
 
   \begin{figure}[htb]\centering
     \includegraphics[height=0.75\textheight]{./images/PEP_CO2e_Emissions.png}
@@ -101,7 +149,7 @@
 
 
 \begin{frame}
-  \frametitle{PM2.5 Concentration over Time}
+  \frametitle{CLEWs: PM2.5 Concentration over Time}
 
   \begin{figure}[htb]\centering
     \includegraphics[height=0.75\textheight]{./images/PEP_PM2.5_Concentration.png}
@@ -109,7 +157,23 @@
 \end{frame}
 
 
-\section{Health Impact Profiles}
+\section{Health Impacts}
+
+
+\begin{frame}
+  \frametitle{Mapping PM2.5 to Labor Productivity}
+
+  \begin{itemize}
+    \item There are strong links in the literature between air pollution (PM2.5) and economic outcomes, including labor productivity
+    \item He, Liu, and Salvo (\emph{AEJ: Applied}, 2019) find that a \textbf{50\% decline in PM2.5 reduces productivity by 3\%}
+    \item We use this mapping to adjust key productivity parameters in OG-PHL:
+      \begin{itemize}
+        \item Ability profiles
+        \item Disutility of labor parameters
+      \end{itemize}
+    \item CLEWS finds a 15\% reduction in PM2.5 under PEP scenario, leading to a 0.9\% increase in productivity
+  \end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{Ability Profiles in Baseline and PEP}
@@ -121,7 +185,7 @@
 
 
 \begin{frame}
-  \frametitle{Chi\_n Profiles in Baseline and PEP}
+  \frametitle{Disutility of Labor in Baseline and PEP}
 
   \begin{figure}[htb]\centering
     \includegraphics[height=0.75\textheight]{./images/chi_n_values.png}
@@ -130,15 +194,28 @@
 
 
 \begin{frame}
-  \frametitle{Mortality Rates in Baseline and PEP}
+  \frametitle{Mapping PM2.5 to Mortality}
+
+  \begin{itemize}
+    \item A substantial scientific literature establishing a link between air pollution (PM2.5) and mortality:
+      \begin{itemize}
+        \item Pope et al. (\emph{Air Quality, Atmosphere, and Health}, 2017): 6-34\% change in mortality per  10$\mu$g/m$^3$ change in PM2.5
+        \item Kim et al. (\emph{Environmental Health}, 2021):  10$\mu$g/m$^3$ increase in in PM2.5 lowers life expectancy by 0.7-0.9 years
+        \item Puett et al. (\emph{Environmental Health Perspectives}, 2009): 10$\mu$g/m$^3$ increase in PM2.5 leads to 4\% increase in all-cause mortality risk
+      \end{itemize}
+    \item We take the estimates of Pope et al. (\emph{Air Quality, Atmosphere, and Health}, 2017) to map PM2.5 concentrations to mortality risk
+    \item The decrease in PM2.5 under the PEP scenario is about 10$\mu$g/m$^3$, which we map to a conservative 4\% decrease in mortality risk
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mortality Baseline and PEP}
 
   \begin{figure}[htb]\centering
-    \includegraphics[height=0.75\textheight]{./images/mortality_rates.png}
+    \includegraphics[height=0.75\textheight]{./images/survival_rates.png}
   \end{figure}
 \end{frame}
 
-
-\section{OG Model Outcomes: Health}
 
 \begin{frame}
   \frametitle{Annual Deaths over Time}
@@ -167,7 +244,7 @@
 \end{frame}
 
 
-\section{OG Model Outcomes: Macro}
+\section{Macro Impacts}
 
 \begin{frame}
   \frametitle{Aggregate Variables over Time}
@@ -181,8 +258,29 @@
   \end{figure}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Long Run Effects on GDP}
+\begin{table}
+% \caption{NPV of GDP Effects under Different Discount Rates}
+\label{tab:PEP_NPV_GDP_Effects_Table}
+\begin{tabular}{cc}
+\hline
+\hline
+ Discount Rate & NPV of GDP Increase \\
+   & (Trillions of PHP) \\
+\hline
+ 1\% & 5,073.030 \\
+ 2\% & 2,216.387 \\
+ 3\% & 998.952 \\
+ 4\% & 466.805 \\
+ 5\% & 227.508 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
 
-\section{OG Model Outcomes: Fiscal}
+Note: PEP23 Estimate of costs: ~26-42 Trillion PHP
+\end{frame}
 
 \begin{frame}
   \frametitle{Debt-to-GDP Ratio over Time}
@@ -192,8 +290,32 @@
   \end{figure}
 \end{frame}
 
+\begin{frame}
 
-\section{OG Model Outcomes: Distributional}
+\frametitle{Long run revenue effects}
+\begin{table}
+% \caption{NPV of Tax Revenue Effects under Different Discount Rates}
+\label{tab:PEP_NPV_Tax_Revenue_Effects_Table}
+\begin{tabular}{lrr}
+\toprule
+ Discount Rate & NPV of Tax Revenue Increase (Trillions PHP) \\
+ e & (Trillions PHP) \\
+\midrule
+ 1\% & 294.667 \\
+ 2\% & 131.213 \\
+ 3\% & 60.710 \\
+ 4\% & 29.408 \\
+ 5\% & 15.041 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Note: PEP23 Estimate of government costs: ~2.6-4.2 Trillion PHP
+
+\end{frame}
+
+
+\section{Dist. Impacts}
 
 \begin{frame}
   \frametitle{Percentage Change in Consumption Good Prices}

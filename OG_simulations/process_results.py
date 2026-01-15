@@ -389,7 +389,7 @@ GDP_diff = pct_change_gdp * NEDA_Forecast[:NUM_YEARS_NPV]
 NPV_dict = {"Discount Rate": [], "NPV of GDP Effect (Trillions PHP)": []}
 for r in [0.01, 0.02, 0.03, 0.04, 0.05]:
     npv = (
-        GDP_diff / ((1 + r) ** (np.arange(NUM_YEARS_NPV))[:, np.newaxis])
+        GDP_diff / ((1 + r) ** (np.arange(NUM_YEARS_NPV)))
     ).sum()
     NPV_dict["Discount Rate"].append(r)
     NPV_dict["NPV of GDP Effect (Trillions PHP)"].append(npv)
@@ -400,6 +400,13 @@ npv_df.to_latex(
     label="tab:PEP_NPV_GDP_Effects_Table",
     float_format="%.3f",
 )
+out_dict = {
+    "GDP": NEDA_Forecast[:NUM_YEARS_NPV],
+    "pct change Y": pct_change_gdp,
+    "discount": (1+0.02) ** np.arange(NUM_YEARS_NPV)
+}
+df = pd.DataFrame(out_dict)
+df.to_csv("test_NPV_Y.csv")
 
 # Fiscal:
 # read in data again
@@ -436,7 +443,7 @@ tax_diff = change_TY * NEDA_Forecast[:NUM_YEARS_NPV]
 NPV_dict = {"Discount Rate": [], "NPV of Tax Revenue (Trillions PHP)": []}
 for r in [0.01, 0.02, 0.03, 0.04, 0.05]:
     npv = (
-        tax_diff / ((1 + r) ** (np.arange(NUM_YEARS_NPV))[:, np.newaxis])
+        tax_diff / ((1 + r) ** (np.arange(NUM_YEARS_NPV)))
     ).sum()
     NPV_dict["Discount Rate"].append(r)
     NPV_dict["NPV of Tax Revenue (Trillions PHP)"].append(npv)
