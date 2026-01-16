@@ -67,16 +67,16 @@ from CLEWS_data import (
 plt.style.use("ogcore.OGcorePlots")
 # set current directory
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
-plot_dir = os.path.join(CUR_DIR, "PEP_simulation_plots")
+plot_dir = os.path.join(CUR_DIR, "c_min_results", "PEP_simulation_plots")
 if not os.path.exists(plot_dir):
     os.makedirs(plot_dir)
-table_dir = os.path.join(CUR_DIR, "PEP_simulation_tables")
+table_dir = os.path.join(CUR_DIR, "c_min_results", "PEP_simulation_tables")
 if not os.path.exists(table_dir):
     os.makedirs(table_dir)
 # set base and reform directories
-base_dir = os.path.join(CUR_DIR, "PEP23_simulation_results", "OUTPUT_BASELINE")
+base_dir = os.path.join(CUR_DIR, "PEP23_simulation_results_cmin", "OUTPUT_BASELINE")
 reform_dir = os.path.join(
-    CUR_DIR, "PEP23_simulation_results", "OUTPUT_PEP2023"
+    CUR_DIR, "PEP23_simulation_results_cmin", "OUTPUT_PEP2023"
 )
 
 
@@ -454,6 +454,42 @@ npv_df.to_latex(
     label="tab:PEP_NPV_Tax_Revenue_Effects_Table",
     float_format="%.3f",
 )
+
+# Analysis of K_m
+Km_diff = np.zeros((NUM_YEARS_NPV, base_params.M))
+for m in range(base_params.M):
+    change_KY = (
+        reform_tpi["K_m"][:NUM_YEARS_NPV, m]
+        / base_tpi["Y"][:NUM_YEARS_NPV]
+    ) - (
+        base_tpi["K_m"][:NUM_YEARS_NPV, m]
+        / base_tpi["Y"][:NUM_YEARS_NPV]
+    )
+    Km_diff[:, m] = change_KY * NEDA_Forecast[:NUM_YEARS_NPV]
+# NPV_dict = {"Discount Rate": [], "NPV of K_m (Trillions PHP)": []}
+# for r in [0.01, 0.02, 0.03, 0.04, 0.05]:
+#     npv = (
+#         Km_diff / ((1 + r) ** (np.arange(NUM_YEARS_NPV)))
+#     ).sum()
+#     NPV_dict["Discount Rate"].append(r)
+#     NPV_dict["NPV of K_m (Trillions PHP)"].append(npv)
+# npv_df = pd.DataFrame(NPV_dict)
+# npv_df.to_latex(
+#     os.path.join(table_dir, "PEP_NPV_K_m_Effects_Table.tex"),
+#     caption="NPV of K_m Effects under Different Discount Rates",
+#     label="tab:PEP_NPV_K_m_Effects_Table",
+#     float_format="%.3f",
+# )
+out_dict = {
+    "GDP": NEDA_Forecast[:NUM_YEARS_NPV],
+    "change Km0": Km_diff[:NUM_YEARS_NPV, 0],
+    "change Km1": Km_diff[:NUM_YEARS_NPV, 1],
+    "change Km2": Km_diff[:NUM_YEARS_NPV, 2],
+    "change Km3": Km_diff[:NUM_YEARS_NPV, 3 ],
+    "discount": (1+0.02) ** np.arange(NUM_YEARS_NPV)
+}
+df = pd.DataFrame(out_dict)
+df.to_csv("test_NPV_Km.csv")
 
 # Distributional:
 # * Plot pct change in p_i over time
