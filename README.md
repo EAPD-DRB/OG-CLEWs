@@ -1,10 +1,10 @@
-# CLEWS-OG
-Integration of the CLEWS and OG-CORE models
+# OG-CLEWs
+Integration of the OG-Core and CLEWs models
 
-## Workshop (January 14-15, 2026 in Manila, Philippines):
+## Workshop (January 15-16, 2026 in Manila, Philippines):
 * 2 days, ~12-13 hours of presentations
 * Tentative Schedule:
-  * Day 1 (can switch oder of CLEWS/OG)
+  * Day 1
     * Introduction to workshop (~ 30 minutes)
     * Background on OG-Core and OG-PHL (~ 3 hours total)
       * Point Parcipants to OG-Core and OG-PHL GitHub code and documentation sites.
